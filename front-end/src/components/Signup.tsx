@@ -20,14 +20,16 @@ const Signup = () => {
     }
 
     const enteredUserData = { enteredEmail, enteredPassword };
-    const response = fetch("http://localhost:3000/postuserdata", {
+    const response = await fetch("http://localhost:3000/usersignupdata", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
       body: JSON.stringify(enteredUserData),
     });
-  };
+
+    console.log("response", await response.json());
+  }; 
   return (
     <>
       <form onSubmit={formInputHandler}>
