@@ -1,11 +1,11 @@
 import { FormEvent, FormEventHandler, useRef, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const [passwordMatch, setPasswordMatch] = useState<boolean>(false);
-
+  const navigate = useNavigate();
   const formInputHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -20,16 +20,24 @@ const Signup = () => {
     }
 
     const enteredUserData = { enteredEmail, enteredPassword };
-    const response = await fetch("http://localhost:3000/usersignupdata", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(enteredUserData),
-    });
-
-    console.log("response", await response.json());
-  }; 
+    try {
+     
+      const response = await fetch("http://localhost:3000/signup", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(enteredUserData),
+      });
+      const data = await response.json();
+      // const
+      const token: string = data.token;
+      // localStorage.setItem("token", token);
+      navigate("./login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <form onSubmit={formInputHandler}>
@@ -42,7 +50,7 @@ const Signup = () => {
         <label>confirm password</label>
         <input ref={confirmPasswordRef}></input>
         <br />
-        <button >signup</button>
+        <button>signup</button>
       </form>
     </>
   );
