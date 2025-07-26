@@ -1,8 +1,10 @@
 import { FormEvent } from "react";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
   const formSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const email = emailRef.current?.value;
@@ -19,10 +21,17 @@ const Login = () => {
         },
         body: JSON.stringify(data),
       });
+      if (response.ok) {
+        const data1 = await response.json();
 
-      const data1 = await response.json();
-      localStorage.setItem("token", data1.token);
-      console.log(data1);
+        console.log("token aya ki nhi", data1);
+        localStorage.setItem("token", data1.token);
+        navigate("/mailbox");
+        console.log(data1);
+      }
+      else{
+        window.alert("invaldi credntials")
+      }
     } catch (error) {
       console.log(error);
     }
