@@ -1,11 +1,18 @@
-import { FormEvent, FormEventHandler, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Signup.css";
+
 const Signup = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const [passwordMatch, setPasswordMatch] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const loginNavigator = () => {
+    navigate("/login");
+  };
+
   const formInputHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -15,13 +22,12 @@ const Signup = () => {
 
     if (enteredPassword !== confirmPassword) {
       setPasswordMatch(false);
-      window.alert("password dont match");
+      window.alert("Passwords do not match");
       return;
     }
 
     const enteredUserData = { enteredEmail, enteredPassword };
     try {
-     
       const response = await fetch("http://localhost:3000/signup", {
         method: "POST",
         headers: {
@@ -29,30 +35,35 @@ const Signup = () => {
         },
         body: JSON.stringify(enteredUserData),
       });
+
       const data = await response.json();
-      // const
-      const token: string = data.token;
-      // localStorage.setItem("token", token);
-      navigate("./login");
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
-    <>
-      <form onSubmit={formInputHandler}>
-        <label>email</label>
-        <input ref={emailRef}></input>
-        <br />
-        <label>password</label>
-        <input ref={passwordRef}></input>
-        <br />
-        <label>confirm password</label>
-        <input ref={confirmPasswordRef}></input>
-        <br />
-        <button>signup</button>
+    <div className="signup-container">
+      <form className="signup-form" onSubmit={formInputHandler}>
+        <h2>Sign Up</h2>
+        <label>Email</label>
+        <input type="email" ref={emailRef} required />
+
+        <label>Password</label>
+        <input type="password" ref={passwordRef} required />
+
+        <label>Confirm Password</label>
+        <input type="password" ref={confirmPasswordRef} required />
+
+        <button type="submit">Sign Up</button>
       </form>
-    </>
+
+      <div className="switch-login">
+        <p>Already have an account?</p>
+        <button onClick={loginNavigator}>Login</button>
+      </div>
+    </div>
   );
 };
 

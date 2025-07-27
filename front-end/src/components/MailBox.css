@@ -1,0 +1,80 @@
+
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f6f8fc;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header a {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.header a:hover {
+  text-decoration: underline;
+}
+
+.mail-form {
+  max-width: 600px;
+  margin: 2rem auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mail-form label {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #202124;
+  font-weight: 500;
+}
+
+.mail-form input,
+.mail-form textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  transition: border 0.2s;
+}
+
+.mail-form input:focus,
+.mail-form textarea:focus {
+  border-color: #1a73e8;
+  outline: none;
+}
+
+.mail-form textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.mail-form button {
+  margin-top: 1.5rem;
+  padding: 10px 24px;
+  font-size: 1rem;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mail-form button:hover {
+  background-color: #1669c1;
+}

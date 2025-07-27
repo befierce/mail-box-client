@@ -51,6 +51,7 @@ export const userLogin = async (req: Request, res: Response) => {
     const payload = { id: user._id, email: user.email };
 
     const token = jwt.sign(payload, secret as string, { expiresIn: "1h" });
+    
 
     res.status(200).json({ message: "login success", token });
   } catch (error) {

@@ -1,9 +1,11 @@
 import { FormEvent, useRef } from "react";
+import { Link } from "react-router-dom";
+import "./MailBox.css";
 
 const MailBox = () => {
   const receiverRef = useRef<HTMLInputElement>(null);
   const subjectRef = useRef<HTMLInputElement>(null);
-  const bodyRef = useRef<HTMLTextAreaElement>(null); // use correct type
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
 
   const sendMailHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,18 +27,34 @@ const MailBox = () => {
 
     const resData = await response.json();
     console.log(resData);
+
+    // reset
+    if (receiverRef.current) receiverRef.current.value = "";
+    if (subjectRef.current) subjectRef.current.value = "";
+    if (bodyRef.current) bodyRef.current.value = "";
   };
 
   return (
-    <form onSubmit={sendMailHandler}>
-      <label>To:</label>
-      <input type="email" ref={receiverRef} required />
-      <label>Subject:</label>
-      <input type="text" ref={subjectRef} required />
-      <label>Body:</label>
-      <textarea ref={bodyRef} required />
-      <button type="submit">Send</button>
-    </form>
+    <>
+      <header className="header">
+        <Link to="/home">home</Link>
+        <Link to="/inbox">Inbox</Link>
+        <Link to="/sent">Sent</Link>
+      </header>
+
+      <form className="mail-form" onSubmit={sendMailHandler}>
+        <label>To:</label>
+        <input type="email" ref={receiverRef} required />
+
+        <label>Subject:</label>
+        <input type="text" ref={subjectRef} required />
+
+        <label>Body:</label>
+        <textarea ref={bodyRef} required />
+
+        <button type="submit">Send</button>
+      </form>
+    </>
   );
 };
 
