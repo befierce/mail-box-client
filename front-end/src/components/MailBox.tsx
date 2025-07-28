@@ -28,10 +28,16 @@ const MailBox = () => {
     const resData = await response.json();
     console.log(resData);
 
-    // reset
-    if (receiverRef.current) receiverRef.current.value = "";
-    if (subjectRef.current) subjectRef.current.value = "";
-    if (bodyRef.current) bodyRef.current.value = "";
+    if (response.ok) {
+      if (receiverRef.current) receiverRef.current.value = "";
+      if (subjectRef.current) subjectRef.current.value = "";
+      if (bodyRef.current) bodyRef.current.value = "";
+
+      console.log("Cleared values:");
+      console.log("Receiver:", receiverRef.current?.value);
+      console.log("Subject:", subjectRef.current?.value);
+      console.log("Body:", bodyRef.current?.value);
+    }
   };
 
   return (
@@ -39,7 +45,8 @@ const MailBox = () => {
       <header className="header">
         <Link to="/home">home</Link>
         <Link to="/inbox">Inbox</Link>
-        <Link to="/sent">Sent</Link>
+        <Link to="/sent">Sent</Link>  
+        <Link to="/logout">logout</Link>
       </header>
 
       <form className="mail-form" onSubmit={sendMailHandler}>
