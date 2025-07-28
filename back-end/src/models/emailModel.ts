@@ -7,6 +7,8 @@ interface iEmail {
   body: string;
   sentAt?: Date;
   updatedAt?: Date;
+  senderDeleted:boolean;
+  recieverDeleted:boolean;
 }
 
 const emailSchema = new Schema<iEmail>(
@@ -15,6 +17,8 @@ const emailSchema = new Schema<iEmail>(
     receiverId: { type: String, required: true },
     subject: { type: String, required: true },
     body: { type: String, required: true },
+    senderDeleted: {type: Boolean, default: false},
+    recieverDeleted: {type: Boolean, default:false}
   },
   { timestamps: { createdAt: "sentAt" } }
 );

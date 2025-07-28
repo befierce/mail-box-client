@@ -1,0 +1,61 @@
+.box-outer {
+  display: flex;
+  height: 80vh;
+  border-top: 1px solid #ccc;
+}
+
+.mail-box {
+  width: 40%;
+  height: 100%;
+  overflow-y: auto;
+  border-right: 1px solid #ccc;
+  padding: 1rem;
+  background-color: #f1f1f1;
+  box-sizing: border-box;
+}
+.delete-mail {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.delete-mail:hover {
+  color: red;
+  background-color: #ffe5e5;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.complete-email {
+  width: 60%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+.selected {
+  background-color: #f0f0f0;
+  border-left: 4px solid blue;
+}
+.mail-box ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.mail-box li {
+  padding: 10px;
+  position: relative;
+  padding-right: 40px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  background-color: white;
+  transition: background 0.3s;
+}
+
+.mail-box li:hover {
+  background-color: #e0e0e0;
+}

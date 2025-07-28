@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const Inbox = () => {
   const [emails, setEmails] = useState<any[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<any>(null);
-  const emailOpener = (index) => {
+  const emailOpener = (index:number) => {
     console.log("email clicked");
     setSelectedEmail(emails[index]);
   };
@@ -48,6 +48,7 @@ const Inbox = () => {
                   <strong>Subject:</strong> {mail.subject}
                   <br />
                   <strong>Body:</strong> {mail.body}
+                  <button className="delete-mail">delete</button>
                 </li>
               ))}
             </ul>
