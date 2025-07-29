@@ -1,11 +1,19 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import "./inbox.css";
 const Inbox = () => {
   const [emails, setEmails] = useState<any[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<any>(null);
-  const emailOpener = (index:number) => {
+  const emailOpener = (index: number) => {
     console.log("email clicked");
     setSelectedEmail(emails[index]);
+  };
+  const deleteMailHandler = async(
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    e.stopPropagation();
+    const respose = await fetch("");
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +56,14 @@ const Inbox = () => {
                   <strong>Subject:</strong> {mail.subject}
                   <br />
                   <strong>Body:</strong> {mail.body}
-                  <button className="delete-mail">delete</button>
+                  <button
+                    className="delete-mail"
+                    onClick={(e) => {
+                      deleteMailHandler(e, index);
+                    }}
+                  >
+                    delete
+                  </button>
                 </li>
               ))}
             </ul>

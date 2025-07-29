@@ -19,12 +19,13 @@ export const sendMail = async (req: Request, res: Response) => {
     body: body,
   });
 
-  try{const savedData = await email.save();
-  console.log("data saved", savedData);
-  res.status(200).json("email sent success");
-}catch(error){
-  console.log(error);
-  res.status(400).json("email sending failed")
+  try {
+    const savedData = await email.save();
+    console.log("data saved", savedData);
+    res.status(200).json("email sent success");
+  } catch (error) {
+    console.log(error);
+    res.status(400).json("email sending failed");
   }
 };
 
@@ -33,8 +34,8 @@ export const getAllSentMails = async (req: Request, res: Response) => {
   const token = req.headers.authorization?.split(" ")[1];
   try {
     const decoded = jwt.verify(token as string, secret as string);
-    const {email }= decoded as JwtPayload;
-    const data = await Email.find({senderId:email});
+    const { email } = decoded as JwtPayload;
+    const data = await Email.find({ senderId: email, senderDeleted:false });
     console.log("emails sent by this email id", data);
     res.status(200).json(data);
   } catch (err) {
@@ -42,17 +43,33 @@ export const getAllSentMails = async (req: Request, res: Response) => {
   }
 };
 
-
-
 export const getAllRecievedMails = async (req: Request, res: Response) => {
   console.log("get mail request arrived");
   const token = req.headers.authorization?.split(" ")[1];
   try {
     const decoded = jwt.verify(token as string, secret as string);
-    const {email }= decoded as JwtPayload;
-    const data = await Email.find({receiverId:email});
+    const { email } = decoded as JwtPayload;
+    const data = await Email.find({ receiverId: email });
     console.log("emails recived by this email id", data);
     res.status(200).json(data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const deleteMailsOfSender = async (req: Request, res: Response) => {
+  console.log("soft delete req arrived");
+  // console.log(req.params.email);
+  const emailOfConcernSender = req.params.email;
+  const idOfMailToBeSoftDeleted = req.body.id;
+  console.log(idOfMailToBeSoftDeleted);
+  try {
+    const response = await Email.updateOne(
+      { _id: idOfMailToBeSoftDeleted, senderId: emailOfConcernSender },
+      { $set: { senderDeleted: true } }
+    );
+    console.log("response after operation delete",response);
+    res.status(200).json({message:"email deletion success"})
   } catch (err) {
     console.log(err);
   }

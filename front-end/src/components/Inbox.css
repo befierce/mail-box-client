@@ -12,19 +12,22 @@
   padding: 1rem;
   background-color: #f1f1f1;
   box-sizing: border-box;
+  position: relative; 
+  padding-right: 40px; 
 }
 .delete-mail {
   position: absolute;
   right: 10px;
   top: 50%;
+  height: 30px;
   transform: translateY(-50%);
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
 .delete-mail:hover {
-  color: red;
-  background-color: #ffe5e5;
+  color: rgb(255, 255, 255);
+  background-color: #000000;
   border-radius: 4px;
   transition: background-color 0.2s, color 0.2s;
 }

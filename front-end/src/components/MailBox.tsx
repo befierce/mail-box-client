@@ -7,7 +7,7 @@ const MailBox = () => {
   const subjectRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
 
-  const sendMailHandler = async (e: FormEvent<HTMLFormElement>) => {
+  const sendMailHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const recieverEmail = receiverRef.current?.value;

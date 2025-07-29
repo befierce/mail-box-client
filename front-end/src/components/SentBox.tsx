@@ -4,6 +4,37 @@ import "./SentBox.css";
 const SentBox = () => {
   const [emails, setEmails] = useState<any[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<any>(null);
+  const deleteMailHandler = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    e.stopPropagation();
+    const token = localStorage.getItem("token");
+    const userSentboxData = emails[index];
+    const id = userSentboxData._id;
+    const userMail = userSentboxData.senderId;
+    console.log("delete mail id", id);
+    console.log("concern user mail", userMail);
+    try {
+      const response = await fetch(
+        `http://localhost:3000/user/delete/mail/${userMail}`,
+        {
+          method: "DELETE",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id }),
+        }
+      );
+      if (response.ok) {
+        console.log("i am here");
+        setEmails((prev) => prev.filter((mail) => mail._id !== id));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const emailOpener = (index: number) => {
     console.log("email clicked");
     setSelectedEmail(emails[index]);
@@ -50,6 +81,14 @@ const SentBox = () => {
                   <strong>Subject:</strong> {mail.subject}
                   <br />
                   <strong>Body:</strong> {mail.body}
+                  <button
+                    className="delete-mail"
+                    onClick={(e) => {
+                      deleteMailHandler(e, index);
+                    }}
+                  >
+                    delete
+                  </button>
                 </li>
               ))}
             </ul>
