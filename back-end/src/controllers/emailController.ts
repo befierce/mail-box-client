@@ -35,7 +35,7 @@ export const getAllSentMails = async (req: Request, res: Response) => {
   try {
     const decoded = jwt.verify(token as string, secret as string);
     const { email } = decoded as JwtPayload;
-    const data = await Email.find({ senderId: email, senderDeleted:false });
+    const data = await Email.find({ senderId: email, senderDeleted: false });
     console.log("emails sent by this email id", data);
     res.status(200).json(data);
   } catch (err) {
@@ -49,7 +49,7 @@ export const getAllRecievedMails = async (req: Request, res: Response) => {
   try {
     const decoded = jwt.verify(token as string, secret as string);
     const { email } = decoded as JwtPayload;
-    const data = await Email.find({ receiverId: email });
+    const data = await Email.find({ receiverId: email ,recieverDeleted: false});
     console.log("emails recived by this email id", data);
     res.status(200).json(data);
   } catch (err) {
@@ -64,13 +64,33 @@ export const deleteMailsOfSender = async (req: Request, res: Response) => {
   const idOfMailToBeSoftDeleted = req.body.id;
   console.log(idOfMailToBeSoftDeleted);
   try {
-    const response = await Email.updateOne(
+    const result = await Email.updateOne(
       { _id: idOfMailToBeSoftDeleted, senderId: emailOfConcernSender },
       { $set: { senderDeleted: true } }
     );
-    console.log("response after operation delete",response);
-    res.status(200).json({message:"email deletion success"})
+    console.log("response after operation delete", result);
+    res.status(200).json({ message: "email deletion success" });
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const deleteMailsOfReciever = async (req: Request, res: Response) => {
+  console.log("request arrived to delete recieved messages");
+  const emailOfConcernReciever = req.params.email;
+  const idOfEmailToBeSoftDeleted = req.body.id;
+  try {
+    const result = await Email.updateOne(
+      {
+        _id: idOfEmailToBeSoftDeleted,
+        receiverId: emailOfConcernReciever,
+      },
+      { $set: { recieverDeleted: true } }
+    );
+    console.log("result after ender id deletion", result);
+    res.status(200).json({ message: "email deletion success" });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({error:"error deleting messsage"})
   }
 };

@@ -8,12 +8,34 @@ const Inbox = () => {
     console.log("email clicked");
     setSelectedEmail(emails[index]);
   };
-  const deleteMailHandler = async(
+  const deleteMailHandler = async (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number
   ) => {
     e.stopPropagation();
-    const respose = await fetch("");
+    const token = localStorage.getItem("token");
+    const email = emails[index].receiverId;
+    const id = emails[index]._id;
+    console.log("emeail   ...", email);
+    console.log("_id   ...", id);
+    try {
+      const response = await fetch(
+        `http://localhost:3000/user/reciever/delete/mail/${email}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id }),
+        }
+      );
+      if (response.ok) {
+        setEmails((prev) => prev.filter((mail) => mail._id != id));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     const fetchData = async () => {

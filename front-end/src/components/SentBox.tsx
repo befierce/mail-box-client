@@ -17,7 +17,7 @@ const SentBox = () => {
     console.log("concern user mail", userMail);
     try {
       const response = await fetch(
-        `http://localhost:3000/user/delete/mail/${userMail}`,
+        `http://localhost:3000/user/sent/delete/mail/${userMail}`,
         {
           method: "DELETE",
           headers: {
