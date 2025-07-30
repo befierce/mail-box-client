@@ -4,9 +4,29 @@ import "./inbox.css";
 const Inbox = () => {
   const [emails, setEmails] = useState<any[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<any>(null);
-  const emailOpener = (index: number) => {
+  const emailOpener = async (index: number) => {
     console.log("email clicked");
+    const id = emails[index]._id;
+    const emailOfReciever = emails[index].receiverId;
+    console.log(".../", emailOfReciever);
     setSelectedEmail(emails[index]);
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+      `http://localhost:3000/user/selected/email/reciever/${emailOfReciever}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `bearer ${token}`,
+        },
+        body: JSON.stringify({ id }),
+      }
+    );
+    setEmails((prev) =>
+      prev.map((email, i) =>
+        i === index ? { ...email, isReadByReciever: true } : email
+      )
+    );
   };
   const deleteMailHandler = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -68,10 +88,9 @@ const Inbox = () => {
             <ul>
               {emails.map((mail, index) => (
                 <li
-                  key={index}
-                  onClick={() => {
-                    emailOpener(index);
-                  }}
+                  key={mail._id}
+                  onClick={() => emailOpener(index)}
+                  className={mail.isReadByReciever ? "selected" : ""}
                 >
                   <strong>from:</strong> {mail.senderId}
                   <br />

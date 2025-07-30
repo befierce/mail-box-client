@@ -24,8 +24,8 @@
   box-sizing: border-box;
 }
 .selected {
-  background-color: #f0f0f0;
-  border-left: 4px solid blue;
+  background-color: #f0f0f0 !important;
+  border-left: 4px solid blue !important;
 }
 .mail-box ul {
   list-style-type: none;

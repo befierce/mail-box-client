@@ -4,6 +4,7 @@ import "./SentBox.css";
 const SentBox = () => {
   const [emails, setEmails] = useState<any[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<any>(null);
+  // const [highlightEmail, highlightSelectedEmail] = useState<any>(null);
   const deleteMailHandler = async (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number
@@ -35,9 +36,29 @@ const SentBox = () => {
       console.log(err);
     }
   };
-  const emailOpener = (index: number) => {
+  const emailOpener = async (index: number) => {
     console.log("email clicked");
+    const id = emails[index]._id;
+    const emailOfSender = emails[index].senderId;
+    console.log(".../", emailOfSender);
     setSelectedEmail(emails[index]);
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+      `http://localhost:3000/user/selected/email/sender/${emailOfSender}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `bearer ${token}`,
+        },
+        body: JSON.stringify({ id }),
+      }
+    );
+    setEmails((prev) =>
+      prev.map((email, i) =>
+        i === index ? { ...email, isReadBySender: true } : email
+      )
+    );
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -72,9 +93,9 @@ const SentBox = () => {
             <ul>
               {emails.map((mail, index) => (
                 <li
-                  key={index}
+                  key={mail._id}
                   onClick={() => emailOpener(index)}
-                  className={selectedEmail === emails[index] ? "selected" : ""}
+                  className={mail.isReadBySender ? "selected" : ""}
                 >
                   <strong>To:</strong> {mail.receiverId}
                   <br />
