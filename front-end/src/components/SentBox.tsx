@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./SentBox.css";
+import { useNavigate } from "react-router-dom";
 const SentBox = () => {
   const [emails, setEmails] = useState<any[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<any>(null);
   // const [highlightEmail, highlightSelectedEmail] = useState<any>(null);
+  const navigate = useNavigate();
+  const logOutHandler = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   const deleteMailHandler = async (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number
@@ -63,6 +70,10 @@ const SentBox = () => {
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
+      if (!token) {
+        window.alert("please login first");
+        navigate("/");
+      }
       const res = await fetch("http://localhost:3000/get/sentbox/emails", {
         method: "GET",
         headers: {
@@ -72,10 +83,13 @@ const SentBox = () => {
       });
 
       const data = await res.json();
-      setEmails(data);
+      setEmails(data.reverse());
     };
 
     fetchData();
+
+
+
   }, []);
 
   return (
@@ -83,7 +97,9 @@ const SentBox = () => {
       <header className="header">
         <Link to="/home">home</Link>
         <Link to="/inbox">inbox</Link>
-        <Link to="/logout">logout</Link>
+        <Link to="/" onClick={logOutHandler}>
+          logout
+        </Link>
       </header>
 
       <div>

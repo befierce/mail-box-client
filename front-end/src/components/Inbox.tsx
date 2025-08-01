@@ -1,9 +1,30 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./inbox.css";
 const Inbox = () => {
   const [emails, setEmails] = useState<any[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<any>(null);
+  const token = localStorage.getItem("token");
+  const logOutHandler = () => {
+    localStorage.removeItem("token");
+    window.alert("logout success");
+  };
+
+  const pollNewEmails = async () => {
+    const token = localStorage.getItem("token");
+    const response = await fetch("http://localhost:3000/user/mails/new", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `bearer ${token}`,
+      },
+    });
+
+    const newEmails = await response.json();
+
+    setEmails((prevEmails) => [...newEmails, ...prevEmails]);
+  };
+
   const emailOpener = async (index: number) => {
     console.log("email clicked");
     const id = emails[index]._id;
@@ -60,6 +81,9 @@ const Inbox = () => {
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
+      if (!token) {
+        window.alert("please login first");
+      }
       const res = await fetch("http://localhost:3000/get/inbox/emails", {
         method: "GET",
         headers: {
@@ -69,17 +93,25 @@ const Inbox = () => {
       });
 
       const data = await res.json();
-      setEmails(data);
+      setEmails(data.reverse());
     };
 
     fetchData();
+
+    if (token) {
+      const intervalId = setInterval(pollNewEmails, 2000);
+
+      return () => clearInterval(intervalId);
+    }
   }, []);
   return (
     <>
       <header className="header">
         <Link to="/home">home</Link>
         <Link to="/sent">sentbox</Link>
-        <Link to="/logout">logout</Link>
+        <Link to="/" onClick={logOutHandler}>
+          logout
+        </Link>
       </header>
       <div>
         <h2>inbox</h2>

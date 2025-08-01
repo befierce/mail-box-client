@@ -1,12 +1,25 @@
 import { FormEvent, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./MailBox.css";
 
 const MailBox = () => {
   const receiverRef = useRef<HTMLInputElement>(null);
   const subjectRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
+  const navigate = useNavigate();
 
+  const logOutHandler = () => {
+    localStorage.removeItem("token");
+    
+  };
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.alert("please login first");
+    navigate("/");
+    
+  }
   const sendMailHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -15,7 +28,9 @@ const MailBox = () => {
     const body = bodyRef.current?.value;
     const data = { subject, body, recieverEmail };
     const token = localStorage.getItem("token");
-
+    if (!token) {
+      window.alert("please login first");
+    }
     const response = await fetch("http://localhost:3000/send", {
       method: "POST",
       headers: {
@@ -45,8 +60,10 @@ const MailBox = () => {
       <header className="header">
         <Link to="/home">home</Link>
         <Link to="/inbox">Inbox</Link>
-        <Link to="/sent">Sent</Link>  
-        <Link to="/logout">logout</Link>
+        <Link to="/sent">Sent</Link>
+        <Link to="/" onClick={logOutHandler}>
+          logout
+        </Link>
       </header>
 
       <form className="mail-form" onSubmit={sendMailHandler}>

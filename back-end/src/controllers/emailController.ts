@@ -5,6 +5,36 @@ import { error } from "console";
 
 const secret = process.env.jwt_secret;
 
+export const getNewWmail = async (req: Request, res: Response) => {
+  console.log("request arrived");
+  const token = req.headers.authorization?.split(" ")[1];
+  console.log("token", token);
+  const decoded = jwt.verify(token as string, secret as string);
+  const { email } = decoded as JwtPayload;
+
+  console.log(decoded);
+  try {
+    const result = await Email.find({
+      receiverId: email,
+      isFetchedByReceiver: false,
+    });
+    try {
+      const result = await Email.updateMany(
+        { receiverId: email, isFetchedByReceiver: false },
+        { $set: { isFetchedByReceiver: true } }
+      );
+    } catch (err) {
+      console.log(
+        "error updating the user data with isfetchde by the reciever"
+      );
+    }
+    res.status(200).json(result);
+  } catch (err) {
+    console.log("error fethcing new mail", err);
+    res.status(400).json({ message: "error fetching new emails" });
+  }
+};
+
 export const sendMail = async (req: Request, res: Response) => {
   const { subject, body, recieverEmail } = req.body;
   const token = req.headers.authorization?.split(" ")[1];
@@ -53,12 +83,12 @@ export const isReadByReciever = async (req: Request, res: Response) => {
   try {
     const response = await Email.updateOne(
       { _id: idOfMailReadInInbox, receiverId: emailOfReciever },
-      { $set:{isReadByReciever:true}}
+      { $set: { isReadByReciever: true } }
     );
     console.log(response);
-    res.status(200).json({message:"meal read update success"});
+    res.status(200).json({ message: "meal read update success" });
   } catch (err) {
-    res.status(400).json({message:"error updating selected email"})
+    res.status(400).json({ message: "error updating selected email" });
   }
 };
 
@@ -72,12 +102,12 @@ export const isReadBySender = async (req: Request, res: Response) => {
   try {
     const response = await Email.updateOne(
       { _id: idOfMailReadInSentbox, senderId: emailOfSender },
-      { $set:{isReadBySender:true}}
+      { $set: { isReadBySender: true } }
     );
     console.log(response);
-    res.status(200).json({message:"meal read update success"});
+    res.status(200).json({ message: "meal read update success" });
   } catch (err) {
-    res.status(400).json({message:"error updating selected email"})
+    res.status(400).json({ message: "error updating selected email" });
   }
 };
 
@@ -91,6 +121,14 @@ export const getAllRecievedMails = async (req: Request, res: Response) => {
       receiverId: email,
       recieverDeleted: false,
     });
+    await Email.updateMany(
+      {
+        receiverId: email,
+        recieverDeleted: false,
+        isFetchedByReceiver: false,
+      },
+      { $set: { isFetchedByReceiver: true } }
+    );
     console.log("emails recived by this email id", data);
     res.status(200).json(data);
   } catch (err) {

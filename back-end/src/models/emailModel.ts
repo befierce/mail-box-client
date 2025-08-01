@@ -7,6 +7,7 @@ interface iEmail {
   body: string;
   sentAt?: Date;
   updatedAt?: Date;
+  isFetchedByReceiver: boolean;
   senderDeleted:boolean;
   recieverDeleted:boolean;
   isReadBySender:boolean;
@@ -19,6 +20,7 @@ const emailSchema = new Schema<iEmail>(
     receiverId: { type: String, required: true },
     subject: { type: String, required: true },
     body: { type: String, required: true },
+    isFetchedByReceiver: { type: Boolean, default: false },
     senderDeleted: {type: Boolean, default: false},
     recieverDeleted: {type: Boolean, default:false},
     isReadBySender:{type:Boolean, default:false},
