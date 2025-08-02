@@ -25,7 +25,7 @@ const SentBox = () => {
     console.log("concern user mail", userMail);
     try {
       const response = await fetch(
-        `http://localhost:3000/user/sent/delete/mail/${userMail}`,
+        `https://mail-box-client-bs8o.onrender.com/user/sent/delete/mail/${userMail}`,
         {
           method: "DELETE",
           headers: {
@@ -51,7 +51,7 @@ const SentBox = () => {
     setSelectedEmail(emails[index]);
     const token = localStorage.getItem("token");
     const response = await fetch(
-      `http://localhost:3000/user/selected/email/sender/${emailOfSender}`,
+      `https://mail-box-client-bs8o.onrender.com/user/selected/email/sender/${emailOfSender}`,
       {
         method: "POST",
         headers: {
@@ -74,7 +74,7 @@ const SentBox = () => {
         window.alert("please login first");
         navigate("/");
       }
-      const res = await fetch("http://localhost:3000/get/sentbox/emails", {
+      const res = await fetch("https://mail-box-client-bs8o.onrender.com/get/sentbox/emails", {
         method: "GET",
         headers: {
           "Content-type": "application/json",

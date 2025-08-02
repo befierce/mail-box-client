@@ -13,7 +13,7 @@ const Inbox = () => {
 
   const pollNewEmails = async () => {
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:3000/user/mails/new", {
+    const response = await fetch("https://mail-box-client-bs8o.onrender.com/user/mails/new", {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -34,7 +34,7 @@ const Inbox = () => {
     setSelectedEmail(emails[index]);
     const token = localStorage.getItem("token");
     const response = await fetch(
-      `http://localhost:3000/user/selected/email/reciever/${emailOfReciever}`,
+      `https://mail-box-client-bs8o.onrender.com/user/selected/email/reciever/${emailOfReciever}`,
       {
         method: "POST",
         headers: {
@@ -62,7 +62,7 @@ const Inbox = () => {
     console.log("_id   ...", id);
     try {
       const response = await fetch(
-        `http://localhost:3000/user/reciever/delete/mail/${email}`,
+        `https://mail-box-client-bs8o.onrender.com/user/reciever/delete/mail/${email}`,
         {
           method: "DELETE",
           headers: {
@@ -86,7 +86,7 @@ const Inbox = () => {
         window.alert("please login first");
         navigate("/");
       }
-      const res = await fetch("http://localhost:3000/get/inbox/emails", {
+      const res = await fetch("https://mail-box-client-bs8o.onrender.com/get/inbox/emails", {
         method: "GET",
         headers: {
           "Content-type": "application/json",

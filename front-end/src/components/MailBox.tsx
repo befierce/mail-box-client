@@ -33,7 +33,7 @@ const MailBox = () => {
     if (!token) {
       window.alert("please login first");
     }
-    const response = await fetch("http://localhost:3000/send", {
+    const response = await fetch("https://mail-box-client-bs8o.onrender.com/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
