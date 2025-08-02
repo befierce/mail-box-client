@@ -5,6 +5,7 @@ const Inbox = () => {
   const [emails, setEmails] = useState<any[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<any>(null);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   const logOutHandler = () => {
     localStorage.removeItem("token");
     window.alert("logout success");
@@ -83,6 +84,7 @@ const Inbox = () => {
       const token = localStorage.getItem("token");
       if (!token) {
         window.alert("please login first");
+        navigate("/");
       }
       const res = await fetch("http://localhost:3000/get/inbox/emails", {
         method: "GET",
